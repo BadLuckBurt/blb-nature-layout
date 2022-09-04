@@ -1,0 +1,14 @@
+{
+    "ModTitle": "blb-nature-layout",
+    "ModVersion": "1.0",
+    "ModAuthor": "BadLuckBurt",
+    "ContactInfo": "x",
+    "DFUnity_Version": "0.14.4",
+    "ModDescription": "Breaks up the grid that the nature flats are laid out on",
+    "GUID": "1884a242-6f94-4573-aca7-87748ea63400",
+    "Files": [
+        "Assets/Game/Mods/blb-nature-layout/BLBNature.cs",
+        "Assets/Game/Mods/blb-nature-layout/BLBNatureLayout.cs",
+        "Assets/Game/Mods/blb-nature-layout/blb-nature-layout.dfmod.json"
+    ]
+}
