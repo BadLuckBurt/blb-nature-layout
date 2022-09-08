@@ -1,0 +1,43 @@
+{
+    "Version": "1",
+    "Sections": [
+        {
+            "Name": "RandomScales",
+            "Description": "Set the random scale per object type here",
+            "IsAdvanced": false,
+            "Keys": [
+                {
+                    "Value": {
+                        "First": 1.0,
+                        "Second": 3.0
+                    },
+                    "Name": "TreeScale",
+                    "Description": "Min-max scale range for trees",
+                    "$version": "v1",
+                    "$type": "DaggerfallWorkshop.Game.Utility.ModSupport.ModSettings.TupleFloatKey"
+                },
+                {
+                    "Value": {
+                        "First": 0.75,
+                        "Second": 1.5
+                    },
+                    "Name": "BushScale",
+                    "Description": "Min-max scale range for bushes",
+                    "$version": "v1",
+                    "$type": "DaggerfallWorkshop.Game.Utility.ModSupport.ModSettings.TupleFloatKey"
+                },
+                {
+                    "Value": {
+                        "First": 1.0,
+                        "Second": 1.5
+                    },
+                    "Name": "RockScale",
+                    "Description": "Min-max scale range for rocks",
+                    "$version": "v1",
+                    "$type": "DaggerfallWorkshop.Game.Utility.ModSupport.ModSettings.TupleFloatKey"
+                }
+            ],
+            "$version": "v1"
+        }
+    ]
+}

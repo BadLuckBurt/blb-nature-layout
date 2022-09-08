@@ -16,7 +16,11 @@ using UnityEditor.SceneManagement;
 
 public class BLBNature : ITerrainNature 
 {
-    public BLBNature() {
+    public BLBNature(float[] treeScale, float[] bushScale, float[] rockScale) {
+        treesRandomScale = treeScale;
+        bushesRandomScale = bushScale;
+        rocksRandomScale = rockScale;
+
         //Load natureAtlases here
         int atlasMaxSize = getAtlasMaxSize();
         int[] natureArchives = new int[]{501,502,503,504,505,506,507,508,509,510,511};
@@ -452,7 +456,6 @@ public class BLBNature : ITerrainNature
         // Apply new batch
         dfBillboardBatch.Apply();
     }
-
     private void setRandomScale(int objectType) {
         if(objectType == 1) {
             MinRandomScale = treesRandomScale[0];
@@ -737,6 +740,7 @@ public class BLBNature : ITerrainNature
             #endif
 
             if(textureFound == false) {
+                settings.stayReadable = true;
                 GetTextureResults textureResults = tr.GetTexture2D(settings, alphaTextureFormat, textureImport);
                 texture = textureResults.albedoMap;
             }
