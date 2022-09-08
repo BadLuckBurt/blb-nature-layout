@@ -24,13 +24,13 @@ public class BLBNatureLayout : MonoBehaviour
         Mod = initParams.Mod;  // Get mod     
         var go = new GameObject(Mod.Title);
         Instance = go.AddComponent<BLBNatureLayout>();
-        Debug.Log("BLB: Adding instance of BLBNature");
-        DaggerfallUnity.Instance.TerrainNature = new BLBNature();
     }
 
     void Awake ()
     {
         Debug.Log("blb-nature-layout awakened");
+        Debug.Log("BLB: Adding instance of BLBNature");
+        DaggerfallUnity.Instance.TerrainNature = new BLBNature();
         Mod.IsReady = true;
     }
 }
