@@ -8,7 +8,7 @@
             "Keys": [
                 {
                     "Value": {
-                        "First": 1.0,
+                        "First": 1.5,
                         "Second": 3.0
                     },
                     "Name": "TreeScale",
@@ -18,8 +18,8 @@
                 },
                 {
                     "Value": {
-                        "First": 0.75,
-                        "Second": 1.5
+                        "First": 1.25,
+                        "Second": 1.75
                     },
                     "Name": "BushScale",
                     "Description": "Min-max scale range for bushes",
@@ -28,8 +28,8 @@
                 },
                 {
                     "Value": {
-                        "First": 1.0,
-                        "Second": 1.5
+                        "First": 1.25,
+                        "Second": 1.75
                     },
                     "Name": "RockScale",
                     "Description": "Min-max scale range for rocks",
