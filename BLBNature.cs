@@ -91,7 +91,12 @@ public class BLBNature : ITerrainNature
         float chanceOnWater = 0.0f;
         DFLocation.ClimateSettings climate = MapsFile.GetWorldClimateSettings(dfTerrain.MapData.worldClimate);
         //GetTextureResults natureArchive = natureAtlases[(int)climate.NatureSet];
-        CachedMaterial cm = GetMaterialFromCache((int)climate.NatureSet);
+        int natureArchive = climate.NatureArchive;
+
+        if(DaggerfallUnity.Instance.WorldTime.Now.SeasonValue == DaggerfallDateTime.Seasons.Winter) {
+            natureArchive = GetWinterArchive(natureArchive);
+        }
+        CachedMaterial cm = GetMaterialFromCache(natureArchive);
         dfBillboardBatch.SetMaterial(cm.material);
 
         //Rect[] rects = atlasRects[(int)climate.NatureSet];
@@ -455,6 +460,18 @@ public class BLBNature : ITerrainNature
         }
         // Apply new batch
         dfBillboardBatch.Apply();
+    }
+
+    private int GetWinterArchive(int archive) {
+        switch(archive) {
+            case 504:
+            case 506:
+            case 508:
+            case 510:
+                return archive + 1;
+            default:
+                return archive;
+        }
     }
     private void setRandomScale(int objectType) {
         if(objectType == 1) {
