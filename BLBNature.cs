@@ -16,7 +16,8 @@ using UnityEditor.SceneManagement;
 
 public class BLBNature : ITerrainNature 
 {
-    public BLBNature(float[] treeScale, float[] bushScale, float[] rockScale) {
+    public BLBNature(float globalScaleModifier, float[] treeScale, float[] bushScale, float[] rockScale) {
+        globalScale = globalScaleModifier;
         treesRandomScale = treeScale;
         bushesRandomScale = bushScale;
         rocksRandomScale = rockScale;
@@ -34,6 +35,7 @@ public class BLBNature : ITerrainNature
             natureAtlases.Add(natureArchives[i], natureAtlas);
         }
     }
+    private float globalScale;
     protected const float maxSteepness = 45f;             // 50
     protected const float slopeSinkRatio = 70f;           // Sink flats slightly into ground as slope increases to prevent floaty trees.
     protected const float baseChanceOnDirt = 0.2f;        // 0.2
@@ -803,7 +805,7 @@ public class BLBNature : ITerrainNature
 
             // Get record information
             DFSize size = new DFSize(textures[record].width, textures[record].height);
-            DFSize scale =  new DFSize((int) (BlocksFile.ScaleDivisor * scaleX), (int) (BlocksFile.ScaleDivisor * scaleY));
+            DFSize scale =  new DFSize((int) ((BlocksFile.ScaleDivisor * scaleX) * globalScale), (int) ((BlocksFile.ScaleDivisor * scaleY) * globalScale));
             DFPosition offset = new DFPosition(0, 0);
             RecordIndex ri = new RecordIndex()
             {

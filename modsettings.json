@@ -8,6 +8,16 @@
             "Keys": [
                 {
                     "Value": {
+                        "First": 1.0,
+                        "Second": 1.0
+                    },
+                    "Name": "GlobalScale",
+                    "Description": "Global scale modifier for texture replacers. Only the first value is used. Change this value when the sprites are too big or too small.",
+                    "$version": "v1",
+                    "$type": "DaggerfallWorkshop.Game.Utility.ModSupport.ModSettings.TupleFloatKey"
+                },
+                {
+                    "Value": {
                         "First": 1.5,
                         "Second": 3.0
                     },

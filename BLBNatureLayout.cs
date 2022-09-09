@@ -40,7 +40,10 @@ public class BLBNatureLayout : MonoBehaviour
         Debug.Log("Setting mod settings property");
         modSettings = Mod.GetSettings();
 
-        DaggerfallWorkshop.Utility.Tuple<float, float> tmpScale = modSettings.GetTupleFloat("RandomScales", "TreeScale");
+        DaggerfallWorkshop.Utility.Tuple<float, float> tmpScale = modSettings.GetTupleFloat("RandomScales", "GlobalScale");
+        float globalScale = tmpScale.First;
+
+        tmpScale = modSettings.GetTupleFloat("RandomScales", "TreeScale");
         float[] treeRandomScale = new float[2];
         treeRandomScale[0] = tmpScale.First;
         treeRandomScale[0] = tmpScale.Second;
@@ -56,7 +59,7 @@ public class BLBNatureLayout : MonoBehaviour
         rockRandomScale[0] = tmpScale.Second;
 
         Debug.Log("BLB: Adding instance of BLBNature");
-        DaggerfallUnity.Instance.TerrainNature = new BLBNature(treeRandomScale, bushRandomScale, rockRandomScale);
+        DaggerfallUnity.Instance.TerrainNature = new BLBNature(globalScale, treeRandomScale, bushRandomScale, rockRandomScale);
         Mod.IsReady = true;
     }
 
