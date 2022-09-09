@@ -24,7 +24,7 @@ public class BLBNature : ITerrainNature
 
         //Load natureAtlases here
         int atlasMaxSize = getAtlasMaxSize();
-        int[] natureArchives = new int[]{501,502,503,504,505,506,507,508,509,510,511};
+        int[] natureArchives = new int[]{500,501,502,503,504,505,506,507,508,509,510,511};
         Material natureAtlas;
         Rect[] rectsOut;
         RecordIndex[] indicesOut;
@@ -801,11 +801,12 @@ public class BLBNature : ITerrainNature
                 flatXML.TryGetFloat("scaleY", out scaleY);
                 scaleX = Mathf.Abs(scaleX);
                 scaleY = Mathf.Abs(scaleY);
+                //results.atlasScales.Add(new Vector2((scaleX * globalScale), (scaleY * globalScale)));
+                //Debug.Log("Found scale " + scaleX.ToString() + " - " + scaleY.ToString());
             }
 
             // Get record information
             DFSize size = new DFSize(textures[record].width, textures[record].height);
-            DFSize scale =  new DFSize((int) ((BlocksFile.ScaleDivisor * scaleX) * globalScale), (int) ((BlocksFile.ScaleDivisor * scaleY) * globalScale));
             DFPosition offset = new DFPosition(0, 0);
             RecordIndex ri = new RecordIndex()
             {
@@ -849,8 +850,8 @@ public class BLBNature : ITerrainNature
             */
 
             results.atlasSizes.Add(new Vector2(size.Width, size.Height));
-            results.atlasScales.Add(new Vector2(scale.Width, scale.Height));
             results.atlasOffsets.Add(new Vector2(offset.X, offset.Y));
+            results.atlasScales.Add(new Vector2(((BlocksFile.ScaleDivisor * scaleX) * globalScale), ((BlocksFile.ScaleDivisor * scaleY) * globalScale)));
             results.atlasFrameCounts.Add(frames);
             //results.textureFile = textureFile;
         }
@@ -883,7 +884,6 @@ public class BLBNature : ITerrainNature
         if (results.atlasIndices == null) results.atlasIndices = new List<RecordIndex>(indices.Count);
         results.atlasRects.AddRange(rects);
         results.atlasIndices.AddRange(indices);
-
         // Shrink UV rect to compensate for internal border
         float ru = 1f / atlasAlbedoMap.width;
         float rv = 1f / atlasAlbedoMap.height;
@@ -910,6 +910,7 @@ public class BLBNature : ITerrainNature
 
     private CachedMaterial GetMaterialFromCache(int key)
     {
+        //Debug.Log("Cache key: " + key.ToString());
         CachedMaterial cachedMaterial = materialDict[key];
 
         // Update timestamp of last access, but only if difference is
