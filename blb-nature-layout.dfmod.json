@@ -7,9 +7,21 @@
     "ModDescription": "Breaks up the grid that the nature flats are laid out on",
     "GUID": "1884a242-6f94-4573-aca7-87748ea63400",
     "Files": [
-        "Assets/Game/Mods/blb-nature-layout/BLBNature.cs",
+        "Assets/Game/Mods/blb-nature-layout/Textures/500_0-0.png",
+        "Assets/Game/Mods/blb-nature-layout/Textures/509_0-0.png",
+        "Assets/Game/Mods/blb-nature-layout/Textures/502_0-0.png",
+        "Assets/Game/Mods/blb-nature-layout/Textures/511_0-0.png",
+        "Assets/Game/Mods/blb-nature-layout/Textures/510_0-0.png",
+        "Assets/Game/Mods/blb-nature-layout/Textures/503_0-0.png",
+        "Assets/Game/Mods/blb-nature-layout/Textures/508_0-0.png",
+        "Assets/Game/Mods/blb-nature-layout/Textures/504_0-0.png",
+        "Assets/Game/Mods/blb-nature-layout/Textures/505_0-0.png",
+        "Assets/Game/Mods/blb-nature-layout/Textures/501_0-0.png",
+        "Assets/Game/Mods/blb-nature-layout/Textures/507_0-0.png",
+        "Assets/Game/Mods/blb-nature-layout/Textures/506_0-0.png",
+        "Assets/Game/Mods/blb-nature-layout/modsettings.json",
         "Assets/Game/Mods/blb-nature-layout/BLBNatureLayout.cs",
-        "Assets/Game/Mods/blb-nature-layout/blb-nature-layout.dfmod.json",
-        "Assets/Game/Mods/blb-nature-layout/modsettings.json"
+        "Assets/Game/Mods/blb-nature-layout/BLBNature.cs",
+        "Assets/Game/Mods/blb-nature-layout/blb-nature-layout.dfmod.json"
     ]
 }

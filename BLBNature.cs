@@ -6,6 +6,7 @@ using DaggerfallConnect.Arena2;
 using DaggerfallConnect;
 using DaggerfallConnect.Utility;
 using DaggerfallWorkshop;
+using DaggerfallWorkshop.Game;
 using DaggerfallWorkshop.Utility.AssetInjection;
 using DaggerfallWorkshop.Utility;
 using DaggerfallWorkshop.Game.Utility.ModSupport;
@@ -54,6 +55,8 @@ public class BLBNature : ITerrainNature
     private float[] treesRandomScale = new float[]{2f, 4f};
     private float[] bushesRandomScale = new float[]{1f, 2f};
     private float[] rocksRandomScale = new float[]{1f, 2f};
+    private bool grassEnabled = true;
+    private bool grassEnabled2 = true;
     public virtual void LayoutNature(DaggerfallTerrain dfTerrain, DaggerfallBillboardBatch dfBillboardBatch, float terrainScale, int terrainDist)
     {
         //dfBillboardBatch.MinRandomScale = 0.875f;
@@ -80,7 +83,7 @@ public class BLBNature : ITerrainNature
         float denseProbability = 0.75f;
         float sparseProbability = 0.4f;
 
-        int maxCount = 16384; //Max number of billboards per map pixel
+        int maxCount = 16000; //Max number of billboards per map pixel
         
         int denseCount = maxCount / 4; //Number of billboards per quadrant when dense
         int averageCount = denseCount / 2; //Number of billboards per quadrant when average
@@ -100,6 +103,27 @@ public class BLBNature : ITerrainNature
         }
         CachedMaterial cm = GetMaterialFromCache(natureArchive);
         dfBillboardBatch.SetMaterial(cm.material);
+
+        GameObject grassGO;
+        GameObject grassGO2;
+        DaggerfallBillboardBatch grassBatch = null;
+        DaggerfallBillboardBatch grassBatch2 = null;
+
+        if(grassEnabled) {
+            grassGO = GetGrassObject(dfTerrain, "GrassBillboards");
+            Debug.Log("Got grass object");
+            GameManager.Instance.StreamingWorld.TrackLooseObject(grassGO, false, dfTerrain.MapPixelX, dfTerrain.MapPixelY, false);
+            grassBatch = grassGO.GetComponent<DaggerfallBillboardBatch>();
+            grassBatch.SetMaterial(cm.material);
+            grassBatch.TextureArchive = dfBillboardBatch.TextureArchive;
+        }
+        if(grassEnabled2) {
+            grassGO2 = GetGrassObject(dfTerrain, "GrassBillboards2");
+            GameManager.Instance.StreamingWorld.TrackLooseObject(grassGO2, false, dfTerrain.MapPixelX, dfTerrain.MapPixelY, false);
+            grassBatch2 = grassGO2.GetComponent<DaggerfallBillboardBatch>();
+            grassBatch2.SetMaterial(cm.material);
+            grassBatch2.TextureArchive = dfBillboardBatch.TextureArchive;
+        }
 
         //Rect[] rects = atlasRects[(int)climate.NatureSet];
         
@@ -327,13 +351,10 @@ public class BLBNature : ITerrainNature
                 if (steepness < maxSteepness) {
                     placementAllowed = 0;
                     int middleX = Mathf.Max(0, Mathf.FloorToInt(offsetX));
-                    int west = Mathf.Max(0, middleX - 1);
-                    int east = Mathf.Min(127, middleX + 1);
                     int middleY = Mathf.Max(0, Mathf.FloorToInt(offsetY));
-                    int north = Mathf.Max(0, middleY - 1);
-                    int south = Mathf.Min(127, middleY + 1);
+                    
                     // Chance also determined by tile type
-                    int tile = checkTiles(middleX, middleY, west, east, north, south, ref dfTerrain.MapData.tilemapSamples);
+                    int tile = checkTiles(middleX, middleY, ref dfTerrain.MapData.tilemapSamples);
                     if (tile == 1)
                     {   // Dirt
                         if (UnityEngine.Random.Range(0f, 1f) <= chanceOnDirt) {
@@ -374,6 +395,12 @@ public class BLBNature : ITerrainNature
                             float height2 = terrain.SampleHeight(pos + terrain.transform.position);
                             height2 = CapHeight(height2);
                             pos.y = height2 - (steepness / slopeSinkRatio);
+
+                            Vector3 grassPos = new Vector3(offsetX, 0, offsetY);
+                            height2 = terrain.SampleHeight(grassPos + terrain.transform.position);
+                            height2 = CapHeight(height2);
+                            grassPos.y = height2 - (steepness / slopeSinkRatio);
+
                             int record = UnityEngine.Random.Range(1, 32);
                             float placementWeight = UnityEngine.Random.Range(0f, 1f);
                             // Add to batch unless a mesh replacement is found
@@ -434,6 +461,13 @@ public class BLBNature : ITerrainNature
                                 float randomScale = UnityEngine.Random.Range(MinRandomScale, MaxRandomScale);
                                 Vector2 billboardScale = new Vector2((int)cm.recordScales[record].x * randomScale, (int)cm.recordScales[record].y * randomScale);
                                 dfBillboardBatch.AddItem(atlasRects[dfBillboardBatch.TextureArchive][record], new Vector2(cm.recordSizes[record].x, cm.recordSizes[record].y), billboardScale, pos);
+                                
+                                if(grassEnabled && grassBatch != null) {
+                                    //record = 0;
+                                    //billboardScale = new Vector2((int)cm.recordScales[record].x, (int)cm.recordScales[record].y);
+                                    //grassBatch.AddItem(atlasRects[grassBatch.TextureArchive][record], new Vector2(cm.recordSizes[record].x, cm.recordSizes[record].y), billboardScale, pos);
+                                }
+
                                 counter++;
                             } else if (!NatureMeshUsed) {
                                 NatureMeshUsed = true;  // Signal that nature mesh has been used to initiate extra terrain updates
@@ -460,8 +494,113 @@ public class BLBNature : ITerrainNature
             offsetX = 0.0f;
             offsetY += increment;
         }
+
         // Apply new batch
         dfBillboardBatch.Apply();
+        if(grassEnabled || grassEnabled2) {
+            float grassChance1 = 0.8f;
+            float grassChance2 = 0.8f;
+            float chance = 1f;
+            float grassSlope = 30.0f;
+            for(int y = 0; y < 128; y++) {
+                float posZ = (y * scale) + UnityEngine.Random.Range(0f, scale / 2);
+                float posZ2 = (y * scale) + UnityEngine.Random.Range(scale / 2, scale);
+                for(int x = 0; x < 128; x++) {
+                    float posX = (x * scale) + UnityEngine.Random.Range(0f, scale / 2);
+                    float posX2 = (x * scale) + UnityEngine.Random.Range(scale / 2, scale);
+
+                    tilePos.x = x;
+                    tilePos.y = y;
+
+                    int tile = checkTiles(x, y, ref dfTerrain.MapData.tilemapSamples);
+                    if(tile != 2) {
+                        continue;
+                    }
+
+                    //if (rect.x > 0 && rect.y > 0 && rect.Contains(tilePos)) {
+                        //continue;
+                    //}
+
+                    float randomScale = 0.25f;//UnityEngine.Random.Range(0.5f, 1f);
+                    float steepness = terrainData.GetSteepness(posX / tDim, posZ / tDim);
+                    if(steepness <= grassSlope) {
+                        Vector3 pos = new Vector3(posX, 0, posZ);
+                        float height = terrain.SampleHeight(pos + terrain.transform.position);
+                        Vector2 billboardScale = new Vector2((int)cm.recordScales[0].x * randomScale, (int)cm.recordScales[0].y * randomScale);
+
+                        if(grassEnabled) {
+                            chance = UnityEngine.Random.Range(0.0f, 1.0f);
+                            if(chance <= grassChance1) {                            
+                                pos.y = CapHeight(height) - (steepness / slopeSinkRatio);
+                                grassBatch.AddItem(atlasRects[grassBatch.TextureArchive][0], new Vector2(cm.recordSizes[0].x, cm.recordSizes[0].y), billboardScale, pos);
+                            }
+                        }
+
+                        if(grassEnabled2) {
+                            chance = UnityEngine.Random.Range(0.0f, 1.0f);
+                            if(chance <= grassChance2) {
+                                pos = new Vector3(posX2, 0, posZ2);
+                                height = terrain.SampleHeight(pos + terrain.transform.position);
+                                pos.y = CapHeight(height) - (steepness / slopeSinkRatio);
+                                billboardScale = new Vector2((int)cm.recordScales[0].x * randomScale, (int)cm.recordScales[0].y * randomScale);
+                                grassBatch2.AddItem(atlasRects[grassBatch2.TextureArchive][0], new Vector2(cm.recordSizes[0].x, cm.recordSizes[0].y), billboardScale, pos);
+                            }
+                        }
+                    }
+                }
+            }
+
+            //if(AddGrass(ref grassBatch, ref terrain, ref terrainData, ref cm, 0.0f)) {
+                if(grassEnabled) {
+                    grassBatch.Apply();
+                }
+                if(grassEnabled2) {
+                    grassBatch2.Apply();
+                }
+            //}
+        }
+    }
+
+    private GameObject GetGrassObject(DaggerfallTerrain dfTerrain, string name) {
+        Transform t = dfTerrain.gameObject.transform;
+        GameObject grassGO = null;
+        for (int i = 0; i < t.childCount; i++) 
+        {
+            if(t.GetChild(i).gameObject.name == name)
+            {
+                grassGO = t.GetChild(i).gameObject;
+                break;
+                //t.GetChild(i).gameObject.SetActive(false);
+                //GameObject.Destroy(t.GetChild(i).gameObject);
+                //return t.GetChild(i).gameObject;
+            }
+        }
+        if(grassGO == null) {
+            grassGO = new GameObject();
+            grassGO.name = name;
+            grassGO.AddComponent<DaggerfallBillboardBatch>();
+        }
+        grassGO.transform.parent = dfTerrain.gameObject.transform;
+        grassGO.transform.localPosition = Vector3.zero;
+        return grassGO;
+    }
+
+    private bool AddGrass(ref DaggerfallBillboardBatch grassBatch, ref Terrain terrain, ref TerrainData terrainData, ref CachedMaterial cm, float offset = 0.0f) {
+        int tDim = MapsFile.WorldMapTileDim;
+        float posX, posZ;
+        for(int y = 0; y < 127; y++) {
+            posZ = (float) y + UnityEngine.Random.Range(0.0f, offset);
+            for(int x = 0; x < 127; x++) {
+                posX = (float) x + UnityEngine.Random.Range(0.0f, offset);
+                float steepness = terrainData.GetSteepness(posX / tDim, posZ / tDim);
+                Vector3 pos = new Vector3(posX, 0, posZ);
+                float height = terrain.SampleHeight(pos + terrain.transform.position);
+                pos.y = CapHeight(height) - (steepness / slopeSinkRatio);
+                Vector2 billboardScale = new Vector2((int)cm.recordScales[0].x, (int)cm.recordScales[0].y);
+                grassBatch.AddItem(atlasRects[grassBatch.TextureArchive][0], new Vector2(cm.recordSizes[0].x, cm.recordSizes[0].y), billboardScale, pos);
+            }
+        }
+        return true;
     }
 
     private int GetWinterArchive(int archive) {
@@ -488,7 +627,12 @@ public class BLBNature : ITerrainNature
         }
     }
 
-    private static int checkTiles(int middleX, int middleY, int west, int east, int north, int south, ref byte[,] tileMapSamples) {
+    private static int checkTiles(int middleX, int middleY, ref byte[,] tileMapSamples) {
+        int west = Mathf.Max(0, middleX - 1);
+        int east = Mathf.Min(127, middleX + 1);
+        int north = Mathf.Max(0, middleY - 1);
+        int south = Mathf.Min(127, middleY + 1);
+
         int tile = tileMapSamples[middleX, north] & 0x3F;
         if(isRoadTile(tile)) {
             return tile;
@@ -806,7 +950,7 @@ public class BLBNature : ITerrainNature
             }
 
             // Get record information
-            DFSize size = new DFSize(textures[record].width, textures[record].height);
+            DFSize size = new DFSize(Mathf.FloorToInt(textures[record].width * scaleX), Mathf.FloorToInt(textures[record].height * scaleY));
             DFPosition offset = new DFPosition(0, 0);
             RecordIndex ri = new RecordIndex()
             {
@@ -851,7 +995,7 @@ public class BLBNature : ITerrainNature
 
             results.atlasSizes.Add(new Vector2(size.Width, size.Height));
             results.atlasOffsets.Add(new Vector2(offset.X, offset.Y));
-            results.atlasScales.Add(new Vector2(((BlocksFile.ScaleDivisor * scaleX) * globalScale), ((BlocksFile.ScaleDivisor * scaleY) * globalScale)));
+            results.atlasScales.Add(new Vector2((BlocksFile.ScaleDivisor * globalScale), (BlocksFile.ScaleDivisor * globalScale)));
             results.atlasFrameCounts.Add(frames);
             //results.textureFile = textureFile;
         }
