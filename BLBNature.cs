@@ -1100,34 +1100,34 @@ public class BLBNature : ITerrainNature
     }
 
     private int[] temperateRocks = new int[]{3, 4, 5, 6};
-    private int[] temperatePlants = new int[]{1, 2, 7, 8, 9, 21, 22, 23, 26, 27, 28, 29};
-    private int[] temperateTrees = new int[]{10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 24, 25, 30, 31};
+    private int[] temperatePlants = new int[]{1, 2, 7, 8, 9, 10, 19, 20, 21, 22, 23, 26, 27, 28, 29, 31};
+    private int[] temperateTrees = new int[]{11, 12, 13, 14, 15, 16, 17, 18, 24, 25, 30};
 
     private int[] mountainRocks = new int[]{1, 3, 4, 6, 14, 17, 18, 27, 28};
-    private int[] mountainPlants = new int[]{2, 7, 8, 9, 22, 23, 26, 29};
-    private int[] mountainTrees = new int[]{5, 10, 11, 12, 13, 15, 16, 19, 20, 21, 24, 25, 30, 31};
+    private int[] mountainPlants = new int[]{2, 7, 8, 9, 10, 16, 19, 20, 22, 23, 26, 29, 31};
+    private int[] mountainTrees = new int[]{5, 11, 12, 13, 15, 21, 24, 25, 30};
 
     private int[] swampRocks = new int[]{2, 3, 4, 5, 6, 10};
-    private int[] swampPlants = new int[]{1, 7, 8, 9, 11, 14, 20, 21, 22, 23, 26, 27, 28, 29, 31};
-    private int[] swampTrees = new int[]{12, 13, 15, 16, 17, 18, 19, 24, 25, 30};
+    private int[] swampPlants = new int[]{1, 7, 8, 9, 11, 14, 19, 20, 21, 22, 23, 25, 26, 27, 28, 29, 31};
+    private int[] swampTrees = new int[]{12, 13, 15, 16, 17, 18, 24, 30};
 
     private int[] desertRocks = new int[]{2, 3, 4, 9, 18, 19, 20, 21, 22, 24};
-    private int[] desertPlants = new int[]{1, 7, 8, 10, 17, 23, 25, 26, 27, 29, 31};
-    private int[] desertTrees = new int[]{5, 6, 11, 12, 13, 14, 15, 16, 28, 30};
+    private int[] desertPlants = new int[]{1, 6, 7, 8, 10, 17, 23, 25, 26, 27, 29, 31};
+    private int[] desertTrees = new int[]{6, 11, 12, 13, 14, 15, 16, 28, 30};
 
     private int[] rainforestRocks = new int[]{4, 17, 28, 29};
-    private int[] rainforestPlants = new int[]{1, 2, 5, 6, 7, 8, 9, 10, 11, 19, 20, 21, 22, 23, 24, 26, 27, 31};
-    private int[] rainforestTrees = new int[]{3, 12, 13, 14, 15, 16, 18, 25, 30};
+    private int[] rainforestPlants = new int[]{1, 2, 5, 6, 7, 8, 9, 10, 11, 19, 20, 21, 22, 23, 24, 25, 26, 27, 31};
+    private int[] rainforestTrees = new int[]{3, 12, 13, 14, 15, 16, 18, 30};
 
     private int[] subtropicalRocks = new int[]{3, 4, 5, 6, 10, 23};
-    private int[] subtropicalPlants = new int[]{1, 2, 7, 8, 9, 14, 18, 21, 22, 25, 26, 28, 29, 31};
-    private int[] subtropicalTrees = new int[]{11, 12, 13, 15, 16, 17, 19, 20, 24, 27, 30};
+    private int[] subtropicalPlants = new int[]{1, 2, 7, 8, 9, 14, 18, 19, 20, 21, 22, 24, 25, 26, 28, 29, 31};
+    private int[] subtropicalTrees = new int[]{11, 12, 13, 15, 16, 17, 27, 30};
 
-    private int[] woodlandRocks = new int[]{1, 3, 4, 6, 17, 18, 28};
-    private int[] woodlandPlants = new int[]{2, 7, 8, 9, 21, 22, 23, 26, 29, 31};
-    private int[] woodlandTrees = new int[]{5, 10, 11, 12, 13, 14, 15, 16, 19, 20, 24, 25, 27, 30};
+    private int[] woodlandRocks = new int[]{1, 3, 4, 6, 17, 18, 27, 28};
+    private int[] woodlandPlants = new int[]{2, 7, 8, 9, 10, 19, 20, 21, 22, 23, 26, 29, 31};
+    private int[] woodlandTrees = new int[]{5, 11, 12, 13, 14, 15, 16, 24, 25, 30};
 
-    private int[] hauntedRocks = new int[]{1, 3, 4, 5, 6, 11, 12, 17};
-    private int[] hauntedPlants = new int[]{2, 7, 8, 9, 14, 21, 22, 23, 26, 27, 28, 29};
-    private int[] hauntedTrees = new int[]{5, 10, 11, 12, 13, 14, 15, 16, 19, 20, 24, 25, 27, 30};
+    private int[] hauntedRocks = new int[]{1, 3, 4, 5, 6, 11, 12};
+    private int[] hauntedPlants = new int[]{2, 7, 8, 9, 10, 12, 14, 17, 19, 20, 21, 22, 23, 25, 26, 27, 28, 29};
+    private int[] hauntedTrees = new int[]{13, 15, 16, 24, 30};
 }
